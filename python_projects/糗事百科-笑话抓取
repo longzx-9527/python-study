@@ -1,0 +1,124 @@
+#  Python爬虫实战一之爬取糗事百科段子
+
+# 目标：
+- 熟悉网络爬虫抓取网页基本流程(获取，解析，存储)
+- 熟悉Python3 urllib.request库
+- 熟悉Python3 re正则表达式使用方法
+- 抓取糗事百科每一页段子相关信息
+
+## 抓取前准备
+
+### 1.urllib.request库要用到的函数
+1.类 urllib.request.Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
+这个类是一个抽象的URL请求。
+
+url应该是一个字符串包含一个有效的url。
+
+headers 应该是一个字典，如果 add_header()被称为与每个键和值作为参数。这通常是用来“恶搞” User-Agent头的值，
+因为使用一个浏览器识别本身——一些常见HTTP服务器只允许请求来自浏览器而不是脚本。
+例如，Mozilla Firefox可能识别本身 “Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11”。
+而 urllib默认的用户代理字符串 是”Python-urllib/2.6”在Python 2.6（）。
+
+2.urllib.request.urlopen(url, data=None, [timeout, ]*, cafile=None, capath=None, cadefault=False, context=None)
+
+打开网址URL,这可以是一个字符串或一个 Request对象。
+
+这个函数始终返回一个对象，像context（上下文） 管理者并提供这些方法
+
+geturl()——返回URL的资源检索,常常重定向之后使用
+
+info()——返回页面的元信息,如标题，组成 email.message_from_string(的)实例(见快速参考HTTP头)
+
+getcode()——返回响应的HTTP状态代码。
+
+为HTTP和HTTPS url，这个函数返回的一个 http.client.HTTPResponse对象略有不同。除了上面的三种新方法中，这个message属性包含相同的信息像reason属性——由服务器返回的原因——而不是响应头,因为它在文档中指定 HTTPResponse。
+
+FTP、文件和数据请求url和显式地处理 URLopener和 FancyURLopener类，这个函数返回一个 urllib.response.addinfourl对象。
+
+urllib.request.urlopen()会在 URLError中抛出协议错误。
+
+
+
+3.urllib.response - urllib使用的响应类
+urllib.response模块定义了定义类似接口的最小文件的函数和类，包括read()和readline()。
+典型的响应对象是addinfourl实例，它定义了一个info()方法并返回标题和一个返回url的geturl()方法。此模块定义的函数由urllib.request模块内部使用。
+
+#### 使用方法
+```
+url = 'https://www.qiushibaike.com/8hr/page/'
+headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
+try:
+    request = urllib.request.Request(url=url, headers=headers)
+    response = urllib.request.urlopen(request)
+except urllib.error.URLError as e:
+    print(e.reason)
+
+html = response.read().decode('utf-8')
+
+```
+
+### 2.正则表达式相关知识
+现在正则表达式在这里稍作说明
+
+1）.*? 是一个固定的搭配，.和*代表可以匹配任意无限多个字符，加上？表示使用非贪婪模式进行匹配，也就是我们会尽可能短地做匹配，以后我们还会大量用到 .*? 的搭配。
+
+2）(.*?)代表一个分组，在这个正则表达式中我们匹配了五个分组，在后面的遍历item中，item[0]就代表第一个(.*?)所指代的内容，item[1]就代表第二个(.*?)所指代的内容，以此类推。
+
+3）re.S 标志代表在匹配时为点任意匹配模式，点 . 也可以代表换行符。
+
+## 抓取糗事百科实现流程
+
+### 1.确定URL并抓取页面代码
+首先我们确定好页面的URL是` http://www.qiushibaike.com/hot/page/1`，其中最后一个数字1代表页数，我们可以传入不同的值来获得某一页的段子内容。
+代码如下：
+```
+
+# -*- coding:utf-8 -*-
+import urllib.request
+
+page = 1
+#指定要抓取网页地址
+url = 'http://www.qiushibaike.com/hot/page/' + str(page)
+headers = {'User_Agent':'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
+try:
+    request = urllib.request.Request(url=url,headers=headers)
+    response = urllib.request.urlopen(request)
+    html = response.read().decode('utf-8')
+    print (html)
+except urllib.error.URLError as e:
+        print (e.reason)
+  ```
+ ### 2.使用正则表达式获取我们需要的内容
+ 
+进入糗事百科我们可以看到，每一个段子都是<div class=”article block untagged mb15″ id=”…”>…</div>包裹的内容。
+
+现在我们想获取发布人姓名、性别、年龄、笑脸数、段子内容，以及点赞的个数。不过另外注意的是，段子有些是带图片的，如果我们想在控制台显示图片是不现实的，
+所以我们直接把带有图片的段子给它剔除掉，只保存仅含文本的段子。
+
+所以我们加入如下正则表达式来匹配一下，用到的方法是 re.findall 是找寻所有匹配的内容。方法的用法详情可以看前面说的正则表达式的介绍。
+```
+#具体正则表达式 使用了6个元组
+p = r'.*?<h2>(.*?)</h2>.*?articleGender (\w+)">(\d+)</div>.*?(?<=<span>)(.*?)(?=</span>).*?stats-vote.*?(\d+).*?number.*?(\d+)'
+pattern = re.compile(p,re.S) #增加re.S模式，主要是为了让'.'能匹配任意字符，特别'\n'
+items = re.findall(pattern,content)#将上面获取的网页内容，使用re.findall函数获取我们想要的内容
+#具体内容可以打印看下
+for item in items:
+    name = item[0]
+    age = item[2]
+    ixl = item[4]
+    ipl = item[5]
+    text = item[3]
+
+    if 'man' in item[1]:
+        sex = '男'
+    elif 'women' in item[1]:
+        sex = '女'
+
+    print('作者:' , name)
+    print('性别:' , sex )
+    print('年龄:' , age )
+    print('笑脸:' , ixl )
+    print('评论:' , ipl )
+    print ('笑话内容:' + text )
+
+```
