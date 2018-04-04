@@ -1,0 +1,36 @@
+main11 begin at Fri Mar 30 15:41:59 2018
+[0, 1, 2, 3]
+fun begin=ForkPoolWorker-1 1*1=1
+fun end=ForkPoolWorker-1 1*1=1
+fun begin=ForkPoolWorker-3 2*2=2
+fun end=ForkPoolWorker-3 2*2=4
+fun begin=ForkPoolWorker-2 0*0=0
+fun end=ForkPoolWorker-2 0*0=0
+fun begin=ForkPoolWorker-2 3*3=3
+fun end=ForkPoolWorker-2 3*3=9
+main11 end at Fri Mar 30 15:42:03 2018
+main11总共用时:4.069867134094238
+main1 begin at Fri Mar 30 15:42:03 2018
+[0, 1, 2, 3]
+fun begin=ForkPoolWorker-5 1*1=1
+fun end=ForkPoolWorker-5 1*1=1
+fun begin=ForkPoolWorker-6 2*2=2
+fun end=ForkPoolWorker-6 2*2=4
+fun begin=ForkPoolWorker-4 0*0=0
+fun end=ForkPoolWorker-4 0*0=0
+fun begin=ForkPoolWorker-4 3*3=3
+fun end=ForkPoolWorker-4 3*3=9
+main1 end at Fri Mar 30 15:42:07 2018
+main1总共用时:4.102998971939087
+main2 begin at Fri Mar 30 15:42:07 2018
+fun begin=ForkPoolWorker-8 1*1=1
+fun end=ForkPoolWorker-8 1*1=1
+fun begin=ForkPoolWorker-9 2*2=2
+fun end=ForkPoolWorker-9 2*2=4
+fun begin=ForkPoolWorker-7 0*0=0
+fun end=ForkPoolWorker-7 0*0=0
+fun begin=ForkPoolWorker-7 3*3=3
+fun end=ForkPoolWorker-7 3*3=9
+main22222222222
+main2 end at Fri Mar 30 15:42:11 2018
+main2总共用时:4.098723888397217
