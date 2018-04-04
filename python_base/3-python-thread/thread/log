@@ -1,0 +1,36 @@
+begin ----------------------
+server begin
+来客 ('127.0.0.1', 38572)
+/home/longzx/tmp/tmp is not a file
+文件头信息:{'filename': 'c.txt', 'filepath': '/home/longzx/tmp', 'filesize': 83020, 'filetype': 'txt', 'charset': 'utf-8'}
+thjson = {"filename": "c.txt", "filepath": "/home/longzx/tmp", "filesize": 83020, "filetype": "txt", "charset": "utf-8"}
+sendfilehead success
+send success
+transhead = {'filename': 'c.txt', 'filepath': '/home/longzx/tmp', 'filesize': 83020, 'filetype': 'txt', 'charset': 'utf-8'}
+msg = b'recv transhead'
+/home/longzx/tmp/c.txt begin  at Mon Apr  2 16:59:09 2018--------------->
+send = 83020
+sendfile success
+/home/longzx/tmp/c.txt end  at Mon Apr  2 16:59:09 2018--------------->
+/home/longzx/tmp/c.txt total time:0.00025725364685058594
+client /home/longzx/tmp begin  at Mon Apr  2 16:59:09 2018--------------->
+client /home/longzx/tmp end  at Mon Apr  2 16:59:18 2018--------------->
+client /home/longzx/tmp total time:8.551790952682495
+recv msg = b'recv file success'
+文件头信息:{'filename': 'a.txt', 'filepath': '/home/longzx/tmp', 'filesize': 83020, 'filetype': 'txt', 'charset': 'utf-8'}
+thjson = {"filename": "a.txt", "filepath": "/home/longzx/tmp", "filesize": 83020, "filetype": "txt", "charset": "utf-8"}
+sendfilehead success
+transhead = {'filename': 'a.txt', 'filepath': '/home/longzx/tmp', 'filesize': 83020, 'filetype': 'txt', 'charset': 'utf-8'}
+client /home/longzx/tmp begin  at Mon Apr  2 16:59:18 2018--------------->
+msg = b'recv transhead'
+/home/longzx/tmp/a.txt begin  at Mon Apr  2 16:59:18 2018--------------->
+send = 83020
+sendfile success
+/home/longzx/tmp/a.txt end  at Mon Apr  2 16:59:18 2018--------------->
+/home/longzx/tmp/a.txt total time:0.00011038780212402344
+client /home/longzx/tmp end  at Mon Apr  2 16:59:26 2018--------------->
+client /home/longzx/tmp total time:8.357375144958496
+recv msg = b'recv file success'
+file all send
+end server
+end -------------------------
